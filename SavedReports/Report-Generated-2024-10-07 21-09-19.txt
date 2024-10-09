@@ -1,0 +1,15 @@
+ - For user request: I need a summary of all .txt files in the Downloads folder.
+ - A total of 1 text files were found.
+ - 1 Files have the right types.
+ - 0 Had wrong types.
+ - Combined summary of all the text files:  Tala Anabtawi: 'for the word count, do the appendices count? Do the appendixices count?' When did this occur?
+
+Abu Zaid al-Hayad: `The word count does not mean only an article's appendices. It means, when the name of an article is written on it.'
+
+Din Issa: 'Do the appendices count when an article is translated from Arabic, Persian, or Arabic?"
+
+Abu Nuwa 'Ali: ''As for whether you count only the appendices, of which 1 is the most common, the answer is 'yes.'''
+
+Abu Nuwa 'Ali: 'It is better to use the term `illuminate' if it may be understood to refer to the fact of being absent or that a given author, having lost something of value, needs it in order to carry on what the author wishes it to be carried on, so that that value can be restored. Then, the same should be said concerning the index of the author in his work. If this is the case, it is better for him to know who has written the work before, and which writer he has met with.'
+
+Din
