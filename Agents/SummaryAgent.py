@@ -31,7 +31,6 @@ class SummaryAgent:
     def combine_summaries(self, kqml_message):
         
         file_data = json.loads(kqml_message)["response"]
-        print(file_data)
 
         if "summaries" not in file_data or not file_data['summaries']:
             return json.dumps({"error": "No summaries found in KQML message"})
