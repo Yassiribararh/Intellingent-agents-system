@@ -22,7 +22,7 @@ class SummaryAgent:
             response = self.combine_summaries(message)
         
         return json.dumps({
-            "sender": 'StatsAgent',
+            "sender": 'SummaryAgent',
             "receiver": receiver,
             "response_code": 200,
             "response": response
@@ -38,7 +38,7 @@ class SummaryAgent:
         combined_summary = " ".join([summary["summary"] for summary in file_data["summaries"]])
 
         # Use the summarizer to refine the combined summary
-        refined_summary = self.summarizer(combined_summary, max_length=100, num_return_sequences=1)[0]["generated_text"]
+        refined_summary = self.summarizer(combined_summary, max_length=400, num_return_sequences=1)[0]["generated_text"]
 
         return {
             "combined_summary": refined_summary
