@@ -6,6 +6,20 @@ class RequirementsAgent:
     def __init__(self):
         self.nlp = spacy.load("en_core_web_sm")
 
+    def send_message(self, receiver, message_type, message):
+        response = 'No reply for this type of message'
+        
+        if message_type.lower() == 'search':
+                response = self.process_requirements(message)
+        
+        return json.dumps({
+            "sender": 'RequirementsAgent',
+            "receiver": receiver,
+            "response_code": 200,
+            "response": response
+        })
+        
+        
     def process_requirements(self, user_request):
         doc = self.nlp(user_request)
 
@@ -37,7 +51,7 @@ class RequirementsAgent:
                 if token.text in file_mask_map:
                     file_mask = "*" + token.text 
 
-        return json.dumps({
+        return {
             "drive_letter": drive_letter,
             "file_mask": file_mask
-        })
+        }

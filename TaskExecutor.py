@@ -17,47 +17,64 @@ logging.getLogger("transformers").setLevel(logging.ERROR)
 def run_system():
     # 1. Start the Requirements agent to get the user request.
     requirements_agent = RequirementsAgent()
-    user_request = "I need a summary of all .txt files in the Desktop folder"
-    kqml_message = requirements_agent.process_requirements(user_request)
-    print(kqml_message)
+    user_request = "I need a summary of all .txt files in the Desktop folder" 
+    requirements_message = requirements_agent.send_message('SearchAgent', 'Search', user_request)
 
     # 2. Use SearchAgent to search files
     search_agent = SearchAgent()
-    kqml_message = search_agent.search_files(kqml_message)
-
+    reply = search_agent.message_reply(requirements_message)
+    print(reply)
+    search_message = search_agent.send_message('MimeAgent', 'CheckMimeTypes', requirements_message)
+    
+    # If no files to summarize end execution
+    if json.loads(search_message)['response'].get('files_count', 0) == 0:
+        print("No text files to summarize")
+        sys.exit()
+        
     # 3. Use MIMEAgent to check MIME types
     mime_agent = MimeAgent()
-    kqml_message = mime_agent.check_mime(kqml_message)
-
+    reply = mime_agent.message_reply(search_message)
+    print(reply)
+    mime_message = mime_agent.send_message('TypesAgent', 'VerifyTypes', search_message)
+    
     # 4. Use TypesAgent to verify file extensions
     types_agent = TypesAgent()
-    kqml_message = types_agent.check_types(kqml_message)
+    reply = types_agent.message_reply(mime_message)
+    print(reply)
+    types_message = types_agent.send_message('TextAgent', 'SummarizeFiles', mime_message)
 
     # 5. Use TextAgent to summarize text files
     text_agent = TextAgent()
-    kqml_message = text_agent.summarize_text(kqml_message)
+    reply = text_agent.message_reply(types_message)
+    print(reply)
+    text_message = text_agent.send_message('StatsAgent', 'CollectStats', types_message)
     
-    # If no files to summarize end execution
-    if json.loads(kqml_message).get('files_count', 0) == 0:
-        print("No text files to summarize")
-        sys.exit()
-
     # 6. Use StatsAgent to collect statistics
     stats_agent = StatsAgent()
-    stats_message = stats_agent.collect_stats(kqml_message)
-
+    reply = stats_agent.message_reply(text_message)
+    print(reply)
+    stats_message = stats_agent.send_message('ReportAgent', 'GenerateReport', text_message)
+    
     # 7. Use SummaryAgent to combine summaries
     summary_agent = SummaryAgent()
-    summary_message = summary_agent.combine_summaries(kqml_message)
-        
+    reply = summary_agent.message_reply(text_message)
+    print(reply)
+    summary_message = summary_agent.send_message('ReportAgent', 'GenerateReport', text_message)
+    
     # 8. Use ReportAgent to generate a report
     report_agent = ReportAgent()
-    report = report_agent.generate_report(user_request, stats_message, summary_message)
+    reply = report_agent.message_reply(stats_message)
+    print(reply)
+    reply = report_agent.message_reply(summary_message)
+    print(reply)
+    report_message = report_agent.send_message('ArchiveAgent', 'ArchiveReport', user_request, stats_message, summary_message)
 
     # 9. Use ArchiveAgent to save results to a database
     archive_agent = ArchiveAgent()
-    archive_agent.save_report(report)
-    print("Report Generated")
+    reply = archive_agent.message_reply(report_message)
+    print(reply)
+    archive_message = archive_agent.send_message('User', 'UserMessage', report_message)
+    print(archive_message)
 
 if __name__ == "__main__":
     run_system()
